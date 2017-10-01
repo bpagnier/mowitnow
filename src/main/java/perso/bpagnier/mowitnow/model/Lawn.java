@@ -30,5 +30,9 @@ public class Lawn {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+	
+	public String toString() {
+		return "lawn [" + width + ";" + height + "]";
+	}
 
 }

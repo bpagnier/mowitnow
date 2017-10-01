@@ -45,7 +45,7 @@ public class LawnService {
 
 				// move the mower
 				mower.setLocation(newLocation);
-				logger.info(mower.getName() + " moved from : " + currentLocation + " to " + newLocation + ". " + mower.getInstructions().size() + " instructions remaning.");
+				logger.info("mower moved from : " + currentLocation + " to " + newLocation + ". " + mower.getInstructions().size() + " instructions remaning.");
 
 			}
 		}

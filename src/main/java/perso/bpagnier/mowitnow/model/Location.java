@@ -11,8 +11,6 @@ public class Location {
 
 	public Location(int x, int y, Direction direction) {
 		Validate.notNull(direction, "Direction can't be null.");
-		Validate.isTrue(x >= 0);
-		Validate.isTrue(y >= 0);
 
 		this.x = x;
 		this.y = y;

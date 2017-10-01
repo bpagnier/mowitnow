@@ -19,22 +19,22 @@ public class LawnServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mowerCannotBeAddedWithoutLawn() throws IncorrectLocationException {
-		new LawnService().addMower(new Mower("", new Location(0, 0, Direction.EAST), new LinkedList<>()));
+		new LawnService().addMower(new Mower(new Location(0, 0, Direction.EAST), new LinkedList<>()));
 	}
 	
 	@Test(expected = IncorrectLocationException.class)
 	public void mowerCannotBeInOccupiedLocation() throws IncorrectLocationException {
 		LawnService lawnService = new LawnService();
 		lawnService.setLawn(new Lawn(5, 5));
-		lawnService.addMower(new Mower("", new Location(0, 0, Direction.EAST), new LinkedList<>()));
-		lawnService.addMower(new Mower("", new Location(0, 0, Direction.NORTH), new LinkedList<>()));
+		lawnService.addMower(new Mower(new Location(0, 0, Direction.EAST), new LinkedList<>()));
+		lawnService.addMower(new Mower(new Location(0, 0, Direction.NORTH), new LinkedList<>()));
 	}
 	
 	@Test(expected = IncorrectLocationException.class)
 	public void mowerCannotBeOutOfBounds() throws IncorrectLocationException {
 		LawnService lawnService = new LawnService();
 		lawnService.setLawn(new Lawn(5, 5));
-		lawnService.addMower(new Mower("", new Location(50, 0, Direction.EAST), new LinkedList<>()));
+		lawnService.addMower(new Mower(new Location(50, 0, Direction.EAST), new LinkedList<>()));
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class LawnServiceTest {
 		instructions.add(Instruction.MOVE_FORWARD);
 		instructions.add(Instruction.MOVE_FORWARD);
 		instructions.add(Instruction.MOVE_FORWARD);
-		Mower mower1 = new Mower("Mower 1", new Location(1, 2, Direction.NORTH), instructions);
+		Mower mower1 = new Mower(new Location(1, 2, Direction.NORTH), instructions);
 
 		Queue<Instruction> instructions2 = new LinkedList<>();
 		instructions2.add(Instruction.MOVE_FORWARD);
@@ -66,7 +66,7 @@ public class LawnServiceTest {
 		instructions2.add(Instruction.TURN_RIGHT);
 		instructions2.add(Instruction.TURN_RIGHT);
 		instructions2.add(Instruction.MOVE_FORWARD);
-		Mower mower2 = new Mower("Mower 2", new Location(3, 3, Direction.EAST), instructions2);
+		Mower mower2 = new Mower(new Location(3, 3, Direction.EAST), instructions2);
 
 		LawnService service = new LawnService();
 

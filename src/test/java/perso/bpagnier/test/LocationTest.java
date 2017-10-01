@@ -35,14 +35,4 @@ public class LocationTest {
 		new Location(0, 0, null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void coordinateXMustBePositive() {
-		new Location(-1, 0, Direction.NORTH);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void coordinateYMustBePositive() {
-		new Location(0, -1, Direction.NORTH);
-	}
-
 }
