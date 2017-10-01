@@ -5,43 +5,36 @@ import static org.junit.Assert.assertEquals;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import perso.bpagnier.mowitnow.control.LawnController;
 import perso.bpagnier.mowitnow.exception.IncorrectLocationException;
 import perso.bpagnier.mowitnow.model.Direction;
 import perso.bpagnier.mowitnow.model.Instruction;
 import perso.bpagnier.mowitnow.model.Lawn;
 import perso.bpagnier.mowitnow.model.Location;
 import perso.bpagnier.mowitnow.model.Mower;
+import perso.bpagnier.mowitnow.service.LawnService;
 
-public class LawnControllerTest {
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+public class LawnServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void mowerCannotBeAddedWithoutLawn() throws IncorrectLocationException {
-		new LawnController().addMower(new Mower("", new Location(0, 0, Direction.EAST), new LinkedList<>()));
+		new LawnService().addMower(new Mower("", new Location(0, 0, Direction.EAST), new LinkedList<>()));
 	}
 	
 	@Test(expected = IncorrectLocationException.class)
 	public void mowerCannotBeInOccupiedLocation() throws IncorrectLocationException {
-		LawnController lawnController = new LawnController();
-		lawnController.setLawn(new Lawn(5, 5));
-		lawnController.addMower(new Mower("", new Location(0, 0, Direction.EAST), new LinkedList<>()));
-		lawnController.addMower(new Mower("", new Location(0, 0, Direction.NORTH), new LinkedList<>()));
-		thrown.expect(IncorrectLocationException.class);
+		LawnService lawnService = new LawnService();
+		lawnService.setLawn(new Lawn(5, 5));
+		lawnService.addMower(new Mower("", new Location(0, 0, Direction.EAST), new LinkedList<>()));
+		lawnService.addMower(new Mower("", new Location(0, 0, Direction.NORTH), new LinkedList<>()));
 	}
 	
 	@Test(expected = IncorrectLocationException.class)
 	public void mowerCannotBeOutOfBounds() throws IncorrectLocationException {
-		LawnController lawnController = new LawnController();
-		lawnController.setLawn(new Lawn(5, 5));
-		lawnController.addMower(new Mower("", new Location(50, 0, Direction.EAST), new LinkedList<>()));
-		thrown.expect(IncorrectLocationException.class);
+		LawnService lawnService = new LawnService();
+		lawnService.setLawn(new Lawn(5, 5));
+		lawnService.addMower(new Mower("", new Location(50, 0, Direction.EAST), new LinkedList<>()));
 	}
 	
 	@Test
@@ -75,15 +68,15 @@ public class LawnControllerTest {
 		instructions2.add(Instruction.MOVE_FORWARD);
 		Mower mower2 = new Mower("Mower 2", new Location(3, 3, Direction.EAST), instructions2);
 
-		LawnController controller = new LawnController();
+		LawnService service = new LawnService();
 
-		controller.setLawn(lawn);
-		controller.addMower(mower1);
-		controller.addMower(mower2);
+		service.setLawn(lawn);
+		service.addMower(mower1);
+		service.addMower(mower2);
 
-		controller.startMowers();
+		service.startMowers();
 		
-		String mowerLocations = controller.getMowersLocations();
+		String mowerLocations = service.getMowersLocations();
 
 		assertEquals(mowerLocations, "1 4 N\n5 1 E");
 	}

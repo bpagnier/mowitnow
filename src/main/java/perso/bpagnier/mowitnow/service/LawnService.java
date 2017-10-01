@@ -1,4 +1,4 @@
-package perso.bpagnier.mowitnow.control;
+package perso.bpagnier.mowitnow.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +14,14 @@ import perso.bpagnier.mowitnow.model.Lawn;
 import perso.bpagnier.mowitnow.model.Location;
 import perso.bpagnier.mowitnow.model.Mower;
 
-public class LawnController {
+public class LawnService {
 
 	private List<Mower> mowers;
 	private Lawn lawn;
 
-	private static Logger logger = LoggerFactory.getLogger(LawnController.class);
+	private static Logger logger = LoggerFactory.getLogger(LawnService.class);
 
-	public LawnController() {
+	public LawnService() {
 		mowers = new ArrayList<>();
 	}
 
