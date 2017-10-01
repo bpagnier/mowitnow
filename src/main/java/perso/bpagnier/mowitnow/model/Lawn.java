@@ -1,19 +1,18 @@
 package perso.bpagnier.mowitnow.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.Validate;
 
 public class Lawn {
 
 	private int width;
 	private int height;
 
-	private static Logger logger = LoggerFactory.getLogger(Lawn.class);
-
 	public Lawn(int width, int height) {
+		Validate.isTrue(width > 0, "lawn width must be positive");
+		Validate.isTrue(height > 0, "lawn height must be positive");
+
 		this.width = width;
 		this.height = height;
-		logger.debug("constructing lawn [" + width + ";" + height + "]");
 	}
 
 	public int getWidth() {

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import perso.bpagnier.mowitnow.control.LawnController;
-import perso.bpagnier.mowitnow.exception.IncorrectMowerLocationException;
+import perso.bpagnier.mowitnow.exception.IncorrectLocationException;
 import perso.bpagnier.mowitnow.model.Direction;
 import perso.bpagnier.mowitnow.model.Instruction;
 import perso.bpagnier.mowitnow.model.Lawn;
@@ -22,7 +22,7 @@ public class MowItNow {
 		logger.info("### MowItNow starting ###");
 	}
 
-	public static void main(String[] args) throws IncorrectMowerLocationException {
+	public static void main(String[] args) throws IncorrectLocationException {
 		Lawn lawn = new Lawn(5, 5);
 
 		Queue<Instruction> instructions = new LinkedList<>();
@@ -49,13 +49,16 @@ public class MowItNow {
 		instructions2.add(Instruction.TURN_RIGHT);
 		instructions2.add(Instruction.TURN_RIGHT);
 		instructions2.add(Instruction.MOVE_FORWARD);
-		Mower mower2 = new Mower("SuperMower 2", new Location(1, 2, Direction.EAST), instructions2);
+		Mower mower2 = new Mower("SuperMower 2", new Location(3, 3, Direction.EAST), instructions2);
+
+		Mower mower3 = new Mower("Frozen mower", new Location(5, 0, Direction.WEST), new LinkedList<>());
 
 		LawnController controller = new LawnController();
 
 		controller.setLawn(lawn);
 		controller.addMower(mower1);
 		controller.addMower(mower2);
+		controller.addMower(mower3);
 
 		controller.startMowers();
 

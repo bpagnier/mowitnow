@@ -2,8 +2,7 @@ package perso.bpagnier.mowitnow.model;
 
 import java.util.Queue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.Validate;
 
 public class Mower {
 
@@ -11,13 +10,14 @@ public class Mower {
 	private Queue<Instruction> instructions;
 	private String name;
 
-	private static Logger logger = LoggerFactory.getLogger(Mower.class);
-
 	public Mower(String name, Location location, Queue<Instruction> instructions) {
+		Validate.notNull(name, "name cannot be null.");
+		Validate.notNull(location, "location cannot be null.");
+		Validate.notNull(instructions, "instructions cannot be null, pass empty collection instead.");
+		
 		this.name = name;
 		this.location = location;
 		this.instructions = instructions;
-		logger.debug("constructing mower : " + toString());
 	}
 
 	public Location getLocation() {

@@ -1,5 +1,7 @@
 package perso.bpagnier.mowitnow.model;
 
+import org.apache.commons.lang.Validate;
+
 public class Location {
 
 	private int x;
@@ -8,6 +10,10 @@ public class Location {
 	private Direction direction;
 
 	public Location(int x, int y, Direction direction) {
+		Validate.notNull(direction, "Direction can't be null.");
+		Validate.isTrue(x >= 0);
+		Validate.isTrue(y >= 0);
+
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
@@ -92,6 +98,19 @@ public class Location {
 		default:
 			throw new IllegalStateException();
 		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Location)) {
+			return false;
+		}
+		Location location = (Location) obj;
+
+		return x == location.getX() && y == location.getY() && direction == location.getDirection();
 	}
 
 	public String toString() {
