@@ -8,7 +8,8 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import perso.bpagnier.mowitnow.exception.IncorrectLocationException;
+import perso.bpagnier.mowitnow.exception.OccupiedLocationException;
+import perso.bpagnier.mowitnow.exception.OutOfBoundLocationException;
 import perso.bpagnier.mowitnow.model.Instruction;
 import perso.bpagnier.mowitnow.model.Lawn;
 import perso.bpagnier.mowitnow.model.Location;
@@ -25,7 +26,7 @@ public class LawnService {
 		mowers = new ArrayList<>();
 	}
 
-	public void startMowers() throws IncorrectLocationException {
+	public void startMowers() throws OccupiedLocationException {
 
 		// the mower moves one after the other
 		for (Mower mower : mowers) {
@@ -38,25 +39,31 @@ public class LawnService {
 				Location currentLocation = mower.getLocation();
 				Location newLocation = instruction.move(mower.getLocation());
 
-				// if the mower moves, test if the new location is accepted
+				// if case of moving forward, there are different possibilities
 				if (instruction == Instruction.MOVE_FORWARD) {
-					verifyLocation(newLocation);
-				}
 
-				// move the mower
-				mower.setLocation(newLocation);
+					if (isOutOfBound(lawn, newLocation)) { // out of bounds : do nothing
+						continue;
+					}
+
+					else if (isOccupied(lawn, newLocation)) { // already occupied : exception
+						throw new OccupiedLocationException("Mower new location " + newLocation + " is already occupied.");
+					}
+
+					else { // everything seems good here, let's move the mower
+						mower.setLocation(newLocation);
+					}
+				}
+				
+				else {
+					// always apply rotation instructions
+					mower.setLocation(newLocation);
+				}
+			
+
 				logger.info("mower moved from : " + currentLocation + " to " + newLocation + ". " + mower.getInstructions().size() + " instructions remaning.");
 
 			}
-		}
-	}
-
-	private void verifyLocation(Location newLocation) throws IncorrectLocationException {
-		if (isOutOfBound(lawn, newLocation)) {
-			throw new IncorrectLocationException("Mower new location " + newLocation + " is out of bounds.");
-		}
-		if (isOccupied(lawn, newLocation)) {
-			throw new IncorrectLocationException("Mower new location " + newLocation + " is already occupied.");
 		}
 	}
 
@@ -78,30 +85,36 @@ public class LawnService {
 		return x < 0 || y < 0 || x > lawnWidth || y > lawnHeight;
 	}
 
-	public void addMower(Mower mower) throws IncorrectLocationException {
+	public void addMower(Mower mower) throws OutOfBoundLocationException, OccupiedLocationException {
 		Validate.notNull(lawn, "cannot add mower without a lawn");
 
 		Location mowerLocation = mower.getLocation();
 
-		verifyLocation(mowerLocation); // test location
+		if (isOccupied(lawn, mowerLocation)) {
+			throw new OccupiedLocationException("location " + mowerLocation + " is already occupied.");
+		}
+		if (isOutOfBound(lawn, mowerLocation)) {
+			throw new OutOfBoundLocationException("location " + mowerLocation + " is out of the lawn bounds.");
+		}
+
 		mowers.add(mower); // it is correct, add the mower to the mower list
 	}
 
 	public String getMowersLocations() {
 		StringBuilder sb = new StringBuilder();
-		
-		for(Mower mower : mowers) {
 
-			if(sb.length() > 0) {
+		for (Mower mower : mowers) {
+
+			if (sb.length() > 0) {
 				sb.append("\n");
 			}
-			
+
 			Location mowerLocation = mower.getLocation();
 			sb.append(mowerLocation.getX()).append(" ");
 			sb.append(mowerLocation.getY()).append(" ");
 			sb.append(mowerLocation.getDirection().getName());
 		}
-		 
+
 		return sb.toString();
 	}
 

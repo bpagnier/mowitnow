@@ -4,8 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import perso.bpagnier.mowitnow.exception.IncorrectLocationException;
 import perso.bpagnier.mowitnow.exception.InstructionFileIncorrectException;
+import perso.bpagnier.mowitnow.exception.OccupiedLocationException;
+import perso.bpagnier.mowitnow.exception.OutOfBoundLocationException;
 import perso.bpagnier.mowitnow.model.Direction;
 import perso.bpagnier.mowitnow.model.Location;
 import perso.bpagnier.mowitnow.service.InstructionService;
@@ -14,17 +15,17 @@ import perso.bpagnier.mowitnow.service.LawnService;
 public class InstructionServiceTest {
 
 	@Test(expected = InstructionFileIncorrectException.class)
-	public void fileMustExists() throws IncorrectLocationException, InstructionFileIncorrectException {
+	public void fileMustExists() throws InstructionFileIncorrectException, OutOfBoundLocationException, OccupiedLocationException {
 		new InstructionService().parseInstructionFile(new LawnService(), "c:/wrongpath.txt");
 	}
 
 	@Test(expected = InstructionFileIncorrectException.class)
-	public void fileMustBeInCorrectFormat() throws IncorrectLocationException, InstructionFileIncorrectException {
+	public void fileMustBeInCorrectFormat() throws InstructionFileIncorrectException, OutOfBoundLocationException, OccupiedLocationException {
 		new InstructionService().parseInstructionFile(new LawnService(), "wrongFormat.txt");
 	}
 
 	@Test
-	public void parsingMustBeCorrect() throws IncorrectLocationException, InstructionFileIncorrectException {
+	public void parsingMustBeCorrect() throws InstructionFileIncorrectException, OutOfBoundLocationException, OccupiedLocationException {
 		LawnService lawnService = new LawnService();
 		new InstructionService().parseInstructionFile(lawnService, "instructions.txt");
 

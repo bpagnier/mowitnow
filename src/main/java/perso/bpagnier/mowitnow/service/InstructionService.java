@@ -10,8 +10,9 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import perso.bpagnier.mowitnow.exception.IncorrectLocationException;
 import perso.bpagnier.mowitnow.exception.InstructionFileIncorrectException;
+import perso.bpagnier.mowitnow.exception.OccupiedLocationException;
+import perso.bpagnier.mowitnow.exception.OutOfBoundLocationException;
 import perso.bpagnier.mowitnow.model.Direction;
 import perso.bpagnier.mowitnow.model.Instruction;
 import perso.bpagnier.mowitnow.model.Lawn;
@@ -26,13 +27,13 @@ public class InstructionService {
 
 	private static Logger logger = LoggerFactory.getLogger(InstructionService.class);
 
-	public void parseInstructionFile(LawnService lawnService, String filePath) throws IncorrectLocationException, InstructionFileIncorrectException {
+	public void parseInstructionFile(LawnService lawnService, String filePath) throws InstructionFileIncorrectException, OutOfBoundLocationException, OccupiedLocationException {
 
 		InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream(filePath);
-		if(fileInputStream == null) {
+		if (fileInputStream == null) {
 			throw new InstructionFileIncorrectException("the instruction file cannot be found");
 		}
-		
+
 		Scanner scanner = new Scanner(fileInputStream);
 
 		// first line : lawn dimensions
@@ -44,7 +45,7 @@ public class InstructionService {
 			Mower mower = parseMower(scanner.nextLine());
 			Queue<Instruction> instructions = parseInstructions(scanner.nextLine());
 			mower.setInstructions(instructions);
-			
+
 			lawnService.addMower(mower);
 			logger.info("new mower added to the lawn : " + mower);
 		}
@@ -85,14 +86,14 @@ public class InstructionService {
 	}
 
 	private Queue<Instruction> parseInstructions(String instructionsLine) throws InstructionFileIncorrectException {
-		
+
 		// test if the instruction line is correct
 		Pattern instructionPattern = Pattern.compile(MOWER_INSTRUCTION_PATTERN);
 		Matcher instructionMatcher = instructionPattern.matcher(instructionsLine);
 		if (!instructionMatcher.matches()) {
 			throw new InstructionFileIncorrectException("instruction line is incorrect");
 		}
-		
+
 		// create instructions
 		Queue<Instruction> instructions = new LinkedList<>();
 		for (char c : instructionsLine.toCharArray()) {

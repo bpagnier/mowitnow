@@ -47,3 +47,9 @@ On peut également tester le parsing des fichiers d'entrée. Le format attendu est
 > - la première ligne donne la position initiale de la tondeuse, ainsi que son orientation. La position et l'orientation sont fournies sous la forme de 2 chiffres et une lettre, séparés par un espace 
 > - la  seconde  ligne  est  une  série  d'instructions  ordonnant  à  la  tondeuse  d'explorer  la pelouse. Les instructions sont une suite de caractères sans espaces. Les lettres possibles sont « D », « G » et « A ». « D » et « G » font pivoter la tondeuse de 90° à droite ou à gauche respectivement, sans la déplacer. « A » signifie que l'on avance la tondeuse d'une case dans la direction à laquelle elle fait face, et sans modifier son orientation. 
 
+L'application gère les cas particuliers tels que :
+ - Ajout d'une tondeuse hors des limites de la pelouse
+ - Collision entre plusieurs tondeuses
+ - Fichier d'entrée inexistant ou mal formé
+ 
+Le code est volontairement plus détaillé que nécessaire par endroits (typiquement la gestion des déplacements des tondeuses dans la méthode **LawnService.startMowers()**), pour préparer le code à d'éventuelles modifications.

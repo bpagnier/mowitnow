@@ -7,7 +7,8 @@ import java.util.Queue;
 
 import org.junit.Test;
 
-import perso.bpagnier.mowitnow.exception.IncorrectLocationException;
+import perso.bpagnier.mowitnow.exception.OccupiedLocationException;
+import perso.bpagnier.mowitnow.exception.OutOfBoundLocationException;
 import perso.bpagnier.mowitnow.model.Direction;
 import perso.bpagnier.mowitnow.model.Instruction;
 import perso.bpagnier.mowitnow.model.Lawn;
@@ -18,27 +19,27 @@ import perso.bpagnier.mowitnow.service.LawnService;
 public class LawnServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
-	public void mowerCannotBeAddedWithoutLawn() throws IncorrectLocationException {
+	public void mowerCannotBeAddedWithoutLawn() throws OutOfBoundLocationException, OccupiedLocationException  {
 		new LawnService().addMower(new Mower(new Location(0, 0, Direction.EAST), new LinkedList<>()));
 	}
 	
-	@Test(expected = IncorrectLocationException.class)
-	public void mowerCannotBeInOccupiedLocation() throws IncorrectLocationException {
+	@Test(expected = OccupiedLocationException.class)
+	public void mowerCannotBeInOccupiedLocation() throws OutOfBoundLocationException, OccupiedLocationException  {
 		LawnService lawnService = new LawnService();
 		lawnService.setLawn(new Lawn(5, 5));
 		lawnService.addMower(new Mower(new Location(0, 0, Direction.EAST), new LinkedList<>()));
 		lawnService.addMower(new Mower(new Location(0, 0, Direction.NORTH), new LinkedList<>()));
 	}
 	
-	@Test(expected = IncorrectLocationException.class)
-	public void mowerCannotBeOutOfBounds() throws IncorrectLocationException {
+	@Test(expected = OutOfBoundLocationException.class)
+	public void mowerCannotBeOutOfBounds() throws OutOfBoundLocationException, OccupiedLocationException  {
 		LawnService lawnService = new LawnService();
 		lawnService.setLawn(new Lawn(5, 5));
 		lawnService.addMower(new Mower(new Location(50, 0, Direction.EAST), new LinkedList<>()));
 	}
 	
 	@Test
-	public void mowersMustMoveCorrectly() throws IncorrectLocationException {
+	public void mowersMustMoveCorrectly() throws OutOfBoundLocationException, OccupiedLocationException {
 		
 		Lawn lawn = new Lawn(5, 5);
 
@@ -50,7 +51,6 @@ public class LawnServiceTest {
 		instructions.add(Instruction.TURN_LEFT);
 		instructions.add(Instruction.MOVE_FORWARD);
 		instructions.add(Instruction.TURN_LEFT);
-		instructions.add(Instruction.MOVE_FORWARD);
 		instructions.add(Instruction.MOVE_FORWARD);
 		instructions.add(Instruction.MOVE_FORWARD);
 		Mower mower1 = new Mower(new Location(1, 2, Direction.NORTH), instructions);
@@ -78,7 +78,7 @@ public class LawnServiceTest {
 		
 		String mowerLocations = service.getMowersLocations();
 
-		assertEquals(mowerLocations, "1 4 N\n5 1 E");
+		assertEquals(mowerLocations, "1 3 N\n5 1 E");
 	}
 
 }
